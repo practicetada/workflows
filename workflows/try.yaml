@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      BUILD_FROM_SCRATCH:
+        type: choice
+        description: build and deploy or just deploy?
+        options:
+        - yes
+        - no
+        default: no
+      ENV_NAME:
+        type: choice
+        description: choose env to work on
+        options:
+        - boba
+        - yoda
+        - jabba
+        - integration
+        required: true
+        default: boba
+      CONTAINER_TO_DEPLOY:
+        description: just deploy this version (example v1.2.3)
+        required: false
+      VCS_BRANCH:
+        default: master
+        required: true
+        description: branch to build
+  workflow_call:
+   inputs:
+      repo-name:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo hello from octo repo!!!!!!!!!!1
+          echo  running in repo:  ${{ inputs.repo-name }}
+          echo test, and deploy your project.
+      
+      - name: test if scripts are working
+        run: | 
+          ls -la .github
+          bash .github/scripts/test.sh
+          practicetada/main/.github/scripts/test.sh@main
